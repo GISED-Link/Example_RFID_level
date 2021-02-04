@@ -36,7 +36,7 @@ ELSE
 	error_id := enBN_IDM_error.header_missmatch;
 END_IF
 
-error := error_id = enBN_IDM_error.no_error;
+error := error_id <> enBN_IDM_error.no_error;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_BF_IDM25_SIMPLE">
