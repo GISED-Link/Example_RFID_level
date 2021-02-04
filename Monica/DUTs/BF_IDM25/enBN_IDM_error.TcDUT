@@ -8,7 +8,8 @@ TYPE enBN_IDM_error :
 	no_error,
 	header_missmatch,
 	no_power,
-	head_failure
+	head_failure,
+	max_
 );
 END_TYPE
 ]]></Declaration>
