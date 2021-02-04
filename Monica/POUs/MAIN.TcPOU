@@ -3,10 +3,11 @@
   <POU Name="MAIN" Id="{3e2d624b-4f29-4b41-b9b7-092210ac80e5}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+	fb_rfid : FB_BF_IDM25_SIMPLE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[fb_rfid(rfid_hw:=GVL.rfid);]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />

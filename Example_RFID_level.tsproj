@@ -2,6 +2,87 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
 	<DataTypes>
 		<DataType>
+			<Name GUID="{E55F688A-A793-8F7C-5642-521DA9EF6FBC}" AutoDeleteType="true">stBN_IDM_header_in</Name>
+			<BitSize>8</BitSize>
+			<SubItem>
+				<Name>CP</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Codetag Present]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>AE</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Job end]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>1</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>AA</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Job accepted]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>2</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>AF</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Job error]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>3</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>zz</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ NOT USED]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>4</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>TB</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Replace TO, Toggle bit]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>5</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>HF</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Head Failure]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>6</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>BB</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Power]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>7</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{6237D520-9B60-67D9-1821-56FCCB8F93C9}" AutoDeleteType="true">unBN_IDM_header_in</Name>
+			<BitSize>8</BitSize>
+			<SubItem>
+				<Name>bits</Name>
+				<Type GUID="{E55F688A-A793-8F7C-5642-521DA9EF6FBC}">stBN_IDM_header_in</Type>
+				<Comment><![CDATA[ bit access]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>raw</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[ byte access]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<Hides>
+				<Hide GUID="{A53EED24-FBA4-FE6A-89D5-93B2F2ECAC22}"/>
+			</Hides>
+		</DataType>
+		<DataType>
 			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BYTE</Name>
 			<BitSize>64</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
@@ -9,6 +90,91 @@
 				<LBound>0</LBound>
 				<Elements>8</Elements>
 			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{1BBB4264-47B6-F18B-FEE6-B58872883291}" AutoDeleteType="true">stBN_IDM_header_out</Name>
+			<BitSize>16</BitSize>
+			<SubItem>
+				<Name>zz</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ UNUSED]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>AV</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Job, 1 = New job pending]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>1</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>zy</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ UNUSED	   ]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>2</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>GR</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Basic state, 1 = Sofware reset]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>3</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>zx</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ UNUSED	]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>4</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>zw</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ UNUSED	]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>5</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>KA</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Head on/off, 1 = Head off]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>6</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>TI</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ Toggle bit, 1 = PLC ready to receive next data]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>7</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>zv</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000010}">BIT</Type>
+				<Comment><![CDATA[ UNUSED]]></Comment>
+				<BitSize>1</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{2EF149C5-23E4-112A-B7D9-D705C7016737}" AutoDeleteType="true">unBN_IDM_header_out</Name>
+			<BitSize>24</BitSize>
+			<SubItem>
+				<Name>bits</Name>
+				<Type GUID="{1BBB4264-47B6-F18B-FEE6-B58872883291}">stBN_IDM_header_out</Type>
+				<Comment><![CDATA[ bit access]]></Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>raw</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[ raw access]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
 		</DataType>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-002000000008}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..0] OF BYTE</Name>
@@ -104,12 +270,12 @@
 						<Var>
 							<Name>GVL.rfid.I_RFID_bitheader1</Name>
 							<Comment><![CDATA[ Bit header for the RFID reader]]></Comment>
-							<Type>BYTE</Type>
+							<Type GUID="{6237D520-9B60-67D9-1821-56FCCB8F93C9}">unBN_IDM_header_in</Type>
 						</Var>
 						<Var>
 							<Name>GVL.rfid.I_RFID_bitheader2</Name>
 							<Comment><![CDATA[ Bit header for the RFID reader, must be equal to bitheader1]]></Comment>
-							<Type>BYTE</Type>
+							<Type GUID="{6237D520-9B60-67D9-1821-56FCCB8F93C9}">unBN_IDM_header_in</Type>
 						</Var>
 						<Var>
 							<Name>GVL.rfid.I_RFID_arr_data</Name>
@@ -160,14 +326,9 @@
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.rfid.O_RFID_bitheader1</Name>
-							<Comment><![CDATA[ Bit header for the RFID reader]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.rfid.O_RFID_bitheader2</Name>
-							<Comment><![CDATA[ Bit header for the RFID reader, must be equal to bitheader1]]></Comment>
-							<Type>BYTE</Type>
+							<Name>GVL.rfid.O_RFID_bitheader</Name>
+							<Comment><![CDATA[ output bitfield header for the RFID reader. Link this value to the 2 headers]]></Comment>
+							<Type GUID="{2EF149C5-23E4-112A-B7D9-D705C7016737}">unBN_IDM_header_out</Type>
 						</Var>
 						<Var>
 							<Name>GVL.rfid.O_RFID_arr_data</Name>
@@ -6752,4 +6913,31 @@
 			</Device>
 		</Io>
 	</Project>
+	<Mappings>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500810000403}" Id="#x02030010"/>
+		<OwnerA Name="TIPC^Monica^Monica Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Box 6 (EP6228-3032)">
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 1"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 2" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 3" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 4" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 5" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 6" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 7" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Byte 8" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_bitheader1^raw" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Bitheader 1"/>
+				<Link VarA="PlcTask Inputs^GVL.rfid.I_RFID_bitheader2^raw" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_in^Bitheader 2"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 1"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 2" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 3" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 4" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 5" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 6" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 7" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_arr_data" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Byte 8" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_bitheader^raw" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Bitheader 1"/>
+				<Link VarA="PlcTask Outputs^GVL.rfid.O_RFID_bitheader^raw" VarB="Module 7 (IO-Link Slave)^IO-Link Port5_out^Bitheader 2"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
 </TcSmProject>

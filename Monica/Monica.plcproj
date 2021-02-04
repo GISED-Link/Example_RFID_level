@@ -17,6 +17,24 @@
     <LibraryReferences>{4e6de41f-5671-4531-927b-01af54eac503}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\BF_IDM25\enBN_IDM_error.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BF_IDM25\stBN_IDM_header_in.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BF_IDM25\stBN_IDM_header_out.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BF_IDM25\stBN_IDM.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BF_IDM25\unBN_IDM_header_in.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BF_IDM25\unBN_IDM_header_out.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\enState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -24,9 +42,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\structButton.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\struct_HW_RFID.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\AXIS.TcGVL">
@@ -60,18 +75,26 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\05_DRIVER\FB_BF_IDM25_FULL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\05_DRIVER\FB_BF_IDM25_SIMPLE.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="DUTs\BF_IDM25" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\00_INIT" />
     <Folder Include="POUs\10_HMI" />
     <Folder Include="POUs\10_HMI\FB%27s" />
     <Folder Include="POUs\20_AUTO" />
     <Folder Include="POUs\20_AUTO\FB%27s" />
+    <Folder Include="POUs\05_DRIVER" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

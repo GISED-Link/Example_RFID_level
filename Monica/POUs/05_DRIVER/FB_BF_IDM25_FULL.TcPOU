@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_BF_IDM25_FULL" Id="{c6d9ef2a-009d-430c-8996-4ccafbe74510}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BF_IDM25_FULL
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	xDATA_READY	: BOOL;		// Data are ready and valid in the RFID reader
+	xBUSY_READ	: BOOL;		// We are reading values and acknowledging the RFID reader
+	xBUSY_WRITE	: BOOL;		// We are writing values and acknowledging the RFID reader
+	iRFID_version : WORD;	// RFID version
+END_VAR
+VAR
+	xInit_done	: BOOL;	// TRUE when the initialisation sequence is done (read the devie version)
+	xCLK_READ	: BOOL;	// clock signal to ensure BUSY_READ flag is not reset before the task has update itself (manage falling edge)
+	xCLK_WRITE	: BOOL;	// clock signal to ensure BUSY_WRITE flag is not reset before the task has update itself (manage falling edge)
+END_VAR
+VAR_IN_OUT
+	rfid_hw		: stBN_IDM;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xBUSY_READ AND NOT xCLK_READ THEN
+	xBUSY_READ := FALSE;
+END_IF
+xCLK_READ := xBUSY_READ;
+
+IF xBUSY_WRITE AND NOT xCLK_WRITE THEN
+	xBUSY_WRITE := FALSE;
+	xCLK_WRITE := TRUE;
+END_IF
+]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{6ee1261a-44da-48ec-9254-0025796928b7}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+(* Constructor of the FB_init
+ *)
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="read_ack" Id="{07d2bed9-8c84-44ad-9a6c-ec05b8f76811}">
+      <Declaration><![CDATA[METHOD PRIVATE read_ack : BOOL
+(* Acknoledge the hardware from a valid read
+ * return TRUE if rfid hardware is not busy
+ *)
+VAR_INPUT
+END_VAR
+
+VAR
+	xRet: BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[read_ack:=FALSE;
+IF NOT THIS.xBUSY THEN
+	THIS.rfid_hw.O_RFID_bitheader1 := 16#01;
+	THIS.rfid_hw.O_RFID_bitheader2 := THIS.rfid_hw.O_RFID_bitheader1;
+	THIS.xBUSY := TRUE;
+	THIS.xCLK := FALSE;
+	read_ack:=TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="read_array" Id="{f6c098c6-0d53-4e95-b24a-dafe12ab47bc}">
+      <Declaration><![CDATA[METHOD PUBLIC read_array : BOOL
+(* Read the full array of data from the RFID
+ * This function reset the BUSY flag from its parent FB
+ *
+ * How to use it:
+ * When the parent READY flag is set, use this method to read all the values
+ * and store them into your local variable
+ * IF fb_myFb.xReady THEN
+ *     fb_myFb.read(ADR(my_local_array));
+  * END_IF
+ *)
+VAR_INPUT
+	pArrData	: POINTER TO ARRAY [0..7] OF BYTE;	// pointer where the data needs to be stored
+END_VAR
+
+VAR
+	i: INT;
+	xRet : BOOL := FALSE; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[read_array := FALSE;
+IF THIS.xReady AND NOT THIS.xBUSY THEN
+	FOR i:=0 TO 7 BY 1 DO
+		^pArrData[i] := THIS.rfid_hw.I_RFID_arr_data[i]; 
+	END_FOR
+	
+	read_array := THIS.read_ack();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="write_reset" Id="{061a51b7-566d-4b59-88c1-6dc6b031dae3}">
+      <Declaration><![CDATA[METHOD PRIVATE write_reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ THIS.rfid_hw.O_RFID_bitheader1 := BN_IDM_flag_out.BB;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_BF_IDM25_FULL">
+      <LineId Id="17" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="25" Count="2" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BF_IDM25_FULL.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BF_IDM25_FULL.read_ack">
+      <LineId Id="23" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="21" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BF_IDM25_FULL.read_array">
+      <LineId Id="31" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="28" Count="1" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BF_IDM25_FULL.write_reset">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

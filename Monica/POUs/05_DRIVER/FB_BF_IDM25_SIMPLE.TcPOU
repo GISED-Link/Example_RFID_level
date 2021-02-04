@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_BF_IDM25_SIMPLE" Id="{8476db27-23ba-4438-8115-ad6ad1dee881}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BF_IDM25_SIMPLE
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	last_read	: ARRAY [0..7] OF BYTE;		// array of the last RFID values inside the reader
+	error		: BOOL;						// To TRUE if the RFID reader is in error
+	error_id	: enBN_IDM_error;				// error id
+END_VAR
+VAR
+	i : INT;
+END_VAR
+VAR_IN_OUT
+	rfid_hw		: stBN_IDM;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[error_id := 0;
+
+IF rfid_hw.I_RFID_bitheader1.raw = rfid_hw.I_RFID_bitheader2.raw THEN
+	
+	IF NOT rfid_hw.I_RFID_bitheader1.bits.BB THEN
+		error_id := enBN_IDM_error.no_power;
+		
+	ELSIF rfid_hw.I_RFID_bitheader1.bits.HF THEN
+		error_id := enBN_IDM_error.head_failure;
+		
+	ELSIF rfid_hw.I_RFID_bitheader1.bits.CP THEN
+		FOR i:=0 TO 7 BY 1 DO
+			last_read[i] := rfid_hw.I_RFID_arr_data[i];
+		END_FOR
+	END_IF
+ELSE
+	error_id := enBN_IDM_error.header_missmatch;
+END_IF
+
+error := error_id = enBN_IDM_error.no_error;
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_BF_IDM25_SIMPLE">
+      <LineId Id="39" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="44" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

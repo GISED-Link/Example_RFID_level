@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="stBN_IDM" Id="{38a2c13a-757b-4c19-9b6a-568a30682070}">
+    <Declaration><![CDATA[TYPE stBN_IDM :
+STRUCT
+		I_RFID_bitheader1	AT %I*	: unBN_IDM_header_in;		// Bit header for the RFID reader
+		I_RFID_bitheader2	AT %I*	: unBN_IDM_header_in;		// Bit header for the RFID reader, must be equal to bitheader1
+		I_RFID_arr_data		AT %I*	: ARRAY [0..7] OF BYTE;	// Data array of the RFID reader
+		
+		O_RFID_bitheader	AT %Q*	: unBN_IDM_header_out;					// output bitfield header for the RFID reader. Link this value to the 2 headers
+		O_RFID_arr_data		AT %Q*	: ARRAY [0..7] OF BYTE;	// Data array of the RFID reader
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

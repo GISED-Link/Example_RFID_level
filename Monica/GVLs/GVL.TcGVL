@@ -7,7 +7,7 @@ VAR_GLOBAL
 (* Allgemeine Globale Variablen *)
 (*******************************************************************)
 
-	rfid : struct_HW_RFID;
+	rfid : stBN_IDM;
 
 END_VAR]]></Declaration>
   </GVL>

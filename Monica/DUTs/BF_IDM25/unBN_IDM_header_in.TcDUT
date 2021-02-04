@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="unBN_IDM_header_in" Id="{7b22c0e8-fe32-446e-85ef-c6452bb428b3}">
+    <Declaration><![CDATA[TYPE unBN_IDM_header_in :
+UNION
+	bits	: stBN_IDM_header_in;	// bit access
+	raw		: BYTE;				// byte access
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="stBN_IDM_header_in" Id="{67172207-9bdd-4505-b0f5-058bf59a02da}">
+    <Declaration><![CDATA[TYPE stBN_IDM_header_in :
+STRUCT
+	CP	: BIT;  // Codetag Present
+	AE	: BIT;  // Job end
+	AA	: BIT;  // Job accepted
+	AF	: BIT;  // Job error
+	zz	: BIT;	// NOT USED
+	TB	: BIT;  // Replace TO, Toggle bit
+	HF	: BIT;  // Head Failure
+	BB	: BIT;	// Power
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
