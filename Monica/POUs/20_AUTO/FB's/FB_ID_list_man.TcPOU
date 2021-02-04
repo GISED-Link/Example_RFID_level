@@ -5,7 +5,8 @@
 (* Manage a list of users ad grant access if user's tag is recognize *)
 
 VAR_INPUT
-	stUserIn	: stUserID;		// input ID
+	stUserIn	: POINTER TO stUserID;		// input ID
+	stArrList : POINTER TO ARRAY [0..19] OF stUserID;
 	xAdd		: BOOL;			// add a user, failed if ID is already use
 	xDel		: BOOL;			// delete a user from the list, fail if ID doesn't exist
 	xAccess 	: BOOL;			// modify the access level
@@ -22,11 +23,7 @@ VAR
 	tonAutoRestore	: TON;		// Restore automatically from error
 	tonTimeOut		: TON;		// Ton timeout access
 	iUserIndex		: INT;		// user index from the list
-END_VAR
-VAR_IN_OUT
-	stArrList : ARRAY [0..19] OF stUserID;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 //----------------------------------------------------------------------------------
@@ -52,13 +49,15 @@ END_IF
 // compute input acctions 
 //----------------------------------------------------------------------------------
 IF xAdd THEN
-	IF NOT add_user(stArrList, stUserIn) THEN
+	IF add_user(stArrList, stUserIn) THEN
+		xPass := TRUE;
+	ELSE
 		xFail := TRUE;
 	END_IF
 END_IF
 
 IF xDel THEN
-	IF NOT delete_user(stArrList, stUserIn) THEN
+	IF delete_user(stArrList, stUserIn) THEN
 		xPass := TRUE;
 	ELSE
 		xFail := TRUE;
@@ -68,8 +67,8 @@ END_IF
 IF xAccess THEN
 	iUserIndex := find_user_in_list(stArrList, stUserIn);
 	IF iUserIndex > 0 THEN
-		stLastUser := stArrList[iUserIndex];
-		iCurrLevel := stArrList[iUserIndex].bLevel;
+		stLastUser := stArrList^[iUserIndex];
+		iCurrLevel := stArrList^[iUserIndex].bLevel;
 		xPass := TRUE;
 	ELSE
 		xFail := TRUE;
@@ -82,8 +81,8 @@ END_IF
       <Declaration><![CDATA[METHOD PRIVATE add_user : BOOL
  (* add a user to the list. Return false is the list is full *)
 VAR_INPUT
-	list	: ARRAY [0..19] OF stUserID;	// list of user
-	user	: stUserID;						// user to add
+	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
+	user	: POINTER TO stUserID;					// user to add
 END_VAR
 VAR
 	i	: INT;
@@ -94,8 +93,8 @@ END_VAR
         <ST><![CDATA[add_user := FALSE;
 
 // Monkey user checks
-IF 0 = LEN(user.sName) OR THIS^.is_tag_empty(user.bArrTag) 
-	OR (user.bLevel < 0) OR (user.bLevel > enAccessLevel.max_) THEN
+IF 0 = LEN(user^.sName) OR THIS^.is_tag_empty(user^.bArrTag) 
+	OR (user^.bLevel < 0) OR (user^.bLevel > enAccessLevel.max_) THEN
 	RETURN;
 END_IF
 
@@ -109,7 +108,7 @@ IF free_index < 0 THEN
 	RETURN;
 END_IF
 
-list[free_index] := user;
+list^[free_index] := user^;
 add_user := TRUE;
 ]]></ST>
       </Implementation>
@@ -118,8 +117,8 @@ add_user := TRUE;
       <Declaration><![CDATA[METHOD PRIVATE delete_user : BOOL
  (* delete a user to the list. Return false when the target user hasn't been found *)
 VAR_INPUT
-	list	: ARRAY [0..19] OF stUserID;	// list of user
-	user	: stUserID;						// user to add
+	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
+	user	: POINTER TO stUserID;					// user to add
 END_VAR
 VAR
 	i	: INT;
@@ -130,7 +129,7 @@ END_VAR
         <ST><![CDATA[delete_user := FALSE;
 
 // Monkey user checks
-IF THIS^.is_tag_empty(user.bArrTag) THEN
+IF THIS^.is_tag_empty(user^.bArrTag) THEN
 	RETURN;
 END_IF
 
@@ -152,7 +151,7 @@ delete_user := TRUE;]]></ST>
  * If a spot is found, then it return the index of the free spot
  *)
 VAR_INPUT
-	list	: ARRAY [0..19] OF stUserID;	// list of user
+	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 END_VAR
 VAR
 	i	: INT;
@@ -160,7 +159,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[FOR i:=0 TO 19 BY 1 DO
-	IF THIS^.is_tag_empty(list[i].bArrTag) THEN
+	IF THIS^.is_tag_empty(list^[i].bArrTag) THEN
 		find_free_index := i;
 		RETURN;
 	END_IF
@@ -176,8 +175,8 @@ find_free_index := -1;
  * If the user is found, the index of the location of the user is returned
  *)
 VAR_INPUT
-	list	: ARRAY [0..19] OF stUserID;	// list of user
-	user	: stUserID;						// user to check
+	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
+	user	: POINTER TO stUserID;						// user to check
 END_VAR
 VAR
 	i	: INT;
@@ -185,7 +184,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[FOR i:=0 TO 19 BY 1 DO
-	IF THIS^.is_tag_equal(list[i].bArrTag, user.bArrTag) THEN
+	IF THIS^.is_tag_equal(list^[i].bArrTag, user^.bArrTag) THEN
 		find_user_in_list := i;
 		RETURN;
 	END_IF
@@ -225,7 +224,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[is_tag_equal := FALSE;
 FOR i:=0 TO 7 BY 1 DO
-	IF tag1[i] <> tag2[i] THEN
+	IF 0 <> MEMCMP(ADR(tag1), ADR(tag2), 8) THEN
 		RETURN;
 	END_IF
 END_FOR
@@ -236,8 +235,8 @@ is_tag_equal := TRUE;]]></ST>
       <Declaration><![CDATA[METHOD PRIVATE is_user_in_list : BOOL
 (* Return TRUE when the given user is in the given list *)
 VAR_INPUT
-	list	: ARRAY [0..19] OF stUserID;	// list of user
-	user	: stUserID;						// user to check
+	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
+	user	: POINTER TO stUserID;						// user to check
 END_VAR
 VAR
 	i	: INT;
@@ -246,7 +245,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[is_user_in_list := FALSE;
 FOR i:=0 TO 19 BY 1 DO
-	IF THIS^.is_tag_equal(list[i].bArrTag, user.bArrTag) THEN
+	IF THIS^.is_tag_equal(list^[i].bArrTag, user^.bArrTag) THEN
 		is_user_in_list := TRUE;
 	END_IF
 END_FOR]]></ST>
@@ -269,13 +268,16 @@ END_FOR]]></ST>
       <LineId Id="57" Count="0" />
       <LineId Id="129" Count="0" />
       <LineId Id="58" Count="0" />
+      <LineId Id="148" Count="1" />
       <LineId Id="60" Count="0" />
       <LineId Id="75" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="39" Count="0" />
       <LineId Id="65" Count="0" />
       <LineId Id="68" Count="0" />
-      <LineId Id="97" Count="3" />
+      <LineId Id="146" Count="1" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="100" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="83" Count="0" />
@@ -340,7 +342,9 @@ END_FOR]]></ST>
       <LineId Id="15" Count="0" />
     </LineIds>
     <LineIds Name="FB_ID_list_man.is_tag_equal">
-      <LineId Id="27" Count="5" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="30" Count="2" />
       <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="FB_ID_list_man.is_user_in_list">
