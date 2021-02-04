@@ -9,113 +9,13 @@ VAR_GLOBAL
 	xFALSE			: 	BOOL := FALSE;	//ALLWAYS FALSE
 	xTRUE			: 	BOOL := TRUE;	//ALLWAYS TRUE
 
-(*******************************************************************)
-(* Flags *)
-(*******************************************************************)
-	enState			:	enState;		//SYSTEM STATUS
-	xInitDone		:	BOOL;			//SYSTEM INITIALIZED
-	xRefDone		:	BOOL;			//Axis REF
-	xAlarm			:	BOOL;			//ALARM AKTIV
-	xMessage		:	BOOL;			//MELDUNG AKTIV
-	xWait			:	BOOL;			//ALLE FBs warten
-	xAIRon			:	BOOL;			//Luftdruck IO
+//----------------------------------------------------------------------------------
+// Access manager
+//----------------------------------------------------------------------------------
+	xAddUser	: structButton;
+	xDelUser	: structButton;
+	xCurrUser	: stUserID;
 	
-	xGoodCycle		:	BOOL;
-	iArSymStat		:	ARRAY[1..20] OF INT;(* -1:= Rot,0:= Grau, 1:= Grün, 2:= Orange*)
-(*******************************************************************)
-(* Buttons *)
-(*******************************************************************)
-	//Control
-	btArMain		: ARRAY[0..10] OF structButton;	(*	
-													0: AUTO
-													1: STEP
-													2: END
-													3: MANU
-													4: INIT
-													5: STOP
-													6: LEER
-													7: QUIT
-													8: RESET TEMP COUNTER
-													9:							*)
-	//Manuel Station 1
-	btArManu01		: ARRAY[1..20] OF structButton;	(*	
-													0: 
-													1: Greifer102.01
-													2: Greifer Horizontal
-													3: Tropfschutz
-													4: Vertikal Sprüh
-													5: Vertikal Impuls
-													6: Horizontal Impuls
-													7: Fetten Sprüh
-													8: Zerstäuben Sprüh
-													9: Fetten Impuls
-													10: REO (Vibro)
-													11: Band Beladen
-													12: Band Abladen
-													13: Band entladen
-													14: Greifer Vertikal
-													15: Stopper
-													16: Positionieren
-													17: Greifer102.02/03
-													18: Zero WTStat
-													*)
-
-
-(*******************************************************************)
-(* ALARME  *)
-(*******************************************************************)
-	
-(*******************************************************************)
-(* Parameter *)
-(*******************************************************************)	
-	iChosenParSet	:	INT;		// angewählter Parametersatz
-	iParametername	: 	INT;		//Liste der PArameternamen Laden
-	strRcpName		:	STRING; 	// Name neues Rezept
-	strRcpLoaded	: 	STRING; 	// Geladener Parameter
-	schosenPar		: 	STRING;
-	xParametername	: 	BOOL;		//Liste der PArameternamen Laden
-	btArParSet		:	ARRAY[0..10] OF structButton;	(*	
-													0: Rezept erstellen	öffnen
-													1: Rezept erstellen	 speichern
-													2: Rezept ändern öffnen
-													3: Rezept ändern speichern
-													4: Rezept Laden öffnen
-													5: Rezept Laden speichern
-													6: Rezept löschen 
-													7: löschen bestätigen	*)
-	
-	
-(*******************************************************************)
-(* ANZEIGE - Werte *)
-(*******************************************************************)
-	iCountBand		:	INT;			// Zähler Band Stopper
-	iCycle			:	INT;			(*Good/bad Cycle
-										0: Zurückgesetzt
-										1:	schlecht Zyklus
-										2:	gut Zyklus*)
-(*******************************************************************)
-(* Sprühkopf*)
-(*******************************************************************)						
-	xSpruehReady	:	BOOL;			// Sprühkopf Ready
-	xSpruehTemp		:	BOOL;			//Temperatur Sprühkopf Ready
-	xSprPosReady	:	BOOL;			//Position Sprühkopf Ready
-	xStartSpr		:	BOOL;			// Sprühkopf Positionieren
-	xSprDone		:	BOOL;			// Sprühkopf Positioniert
-	rDruckSpr1		:	REAL;			// Druck Sprühkopf1
-	rDruckSpr2		:	REAL;			// Druck Sprühkopf2
-	btTropfblech	:	StructButton;	// Tropfblech in GS
-	
-(*******************************************************************)
-(* Cycle Time [STATION]*)
-(*******************************************************************)
-	dwArStartTime	: 	ARRAY[0..10] OF DWORD;
-	dwArCycleTime	: 	ARRAY[0..10] OF DWORD;
-	
-(*******************************************************************)
-(* Diverses *)
-(*******************************************************************)
-	iMsgParts		: INT;		//0: i.o. /1: MSG /2: teile entfernt
-	xWriteALlog		: BOOL;	//Alarmlog schreiben in File
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
