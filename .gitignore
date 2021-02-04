@@ -354,4 +354,4 @@ MigrationBackup/
 
 #Twincat3 XAE
 *.tsproj.bak
-./*/_Libraries/*
+*.compiled-library
