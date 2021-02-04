@@ -87,6 +87,12 @@
     <Compile Include="POUs\05_DRIVER\FB_BF_IDM25_SIMPLE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\10_HMI\FB%27s\FB_BUTTON.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\10_HMI\_14_STATE.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\FB_ID_list_man.TcPOU">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="_14_STATE" Id="{1a7bbf23-ba3c-4cd2-819d-dddc33782adf}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM _14_STATE
+(****************************************************************************)
+//STATE PROGRAMM
+//	- Control Buttons
+//	- Status Anlage
+//
+//	09.09.2020 / MAD
+//
+//	Version:			--> Anpassen Projekt 20116
+(****************************************************************************)
+VAR
+	//Control Buttons
+	fb_xAdd		: FB_BUTTON;
+	fb_xDel		: FB_BUTTON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//****************************************************************************
+// 	CONTROL BUTTONS
+//****************************************************************************
+//	AUTO 
+fb_xAdd(pbtIN:= ADR(HMI.xAddUser),
+	xINdis:= FALSE, 
+	xINon:= main.fb_id_list.xPass AND HMI.xAddUser.press, 
+	xINerr:= main.fb_id_list.xFail AND HMI.xAddUser.press);
+
+fb_xDel(pbtIN:= ADR(HMI.xDelUser),
+	xINdis:= FALSE, 
+	xINon:= main.fb_id_list.xPass AND HMI.xDelUser.press, 
+	xINerr:= main.fb_id_list.xFail AND HMI.xDelUser.press);
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="_14_STATE">
+      <LineId Id="3" Count="2" />
+      <LineId Id="157" Count="5" />
+      <LineId Id="240" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
