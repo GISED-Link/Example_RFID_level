@@ -2,6 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_ID_list_man" Id="{9b76b178-bc7a-4898-96bb-151fb9de157f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ID_list_man
+(* Manage a list of users ad grant access if user's tag is recognize *)
+
 VAR_INPUT
 	stUserIn	: stUserID;		// input ID
 	xAdd		: BOOL;			// add a user, failed if ID is already use
@@ -193,6 +195,7 @@ find_user_in_list := -1;]]></ST>
     </Method>
     <Method Name="is_tag_empty" Id="{c9145936-ac3c-42d2-9e07-1221c6a18460}">
       <Declaration><![CDATA[METHOD PRIVATE is_tag_empty : BOOL
+(* Return TRUE if all the fields from a tag is emtpy *)
 VAR_INPUT
 	tag		: ARRAY [0..7] OF BYTE;	// input tag
 END_VAR

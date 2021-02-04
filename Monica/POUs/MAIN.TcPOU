@@ -8,10 +8,13 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fb_rfid(rfid_hw:=GVL.rfid);]]></ST>
+      <ST><![CDATA[fb_rfid(rfid_hw:=GVL.rfid);
+fb_id_list(	stUserIn := local_user_id, $
+			xAdd := HMI_xAdd, xDel := HMI_xDel, xAccess := HMI_xAccess, tRestore := T#5s, tTimeOut := T#20m);]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
+      <LineId Id="10" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>
