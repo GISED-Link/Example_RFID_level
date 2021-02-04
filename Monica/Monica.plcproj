@@ -35,6 +35,9 @@
     <Compile Include="DUTs\BF_IDM25\unBN_IDM_header_out.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\enAccessLevel.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\enState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -42,6 +45,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\structButton.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\stUserID.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\AXIS.TcGVL">

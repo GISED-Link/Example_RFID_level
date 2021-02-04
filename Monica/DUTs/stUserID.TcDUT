@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="stUserID" Id="{64a71cb7-17bf-4e9f-9500-9fe69eabe144}">
+    <Declaration><![CDATA[TYPE stUserID :
+	(* Retain user ID with a tag number *)
+STRUCT
+	bArrTag		: ARRAY [0..7] OF BYTE;		// tag number
+	sName		: STRING;					// user name
+	bLevel		: BYTE;						// access level
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
