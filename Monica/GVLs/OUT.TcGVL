@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="OUT" Id="{34520a39-c189-434d-baeb-74e497a787c7}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+(*******************************************************************)
+(* AUSGÄNGE *)
+(*******************************************************************)
+	(* Modul1 *)	
+	//-EL2008
+	Q000_res				AT %QX0.0		:	BOOL;			// reserve
+	Q001_res				AT %QX0.1		:	BOOL;			// reserve
+	Q002_res				AT %QX0.2		:	BOOL;			// reserve
+	Q003_res				AT %QX0.3		:	BOOL;			// reserve
+	Q004_res				AT %QX0.4		:	BOOL;			// reserve
+	Q005_res				AT %QX0.5		:	BOOL;			// reserve
+	Q006_res				AT %QX0.6		:	BOOL;			// reserve
+	Q007_res				AT %QX0.7		:	BOOL;			// reserve
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

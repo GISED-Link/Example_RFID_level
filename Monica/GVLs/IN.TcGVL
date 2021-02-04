@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="IN" Id="{509f397e-8f22-45ab-9d7d-130cd3325eaa}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+(*******************************************************************)
+(* EINGÄNGE *)
+(*******************************************************************)
+	(* Modul Digital Eingang*)
+	//-EL1008#
+	I000_reserve	AT %I*		:	BOOL;			// reserve
+	I001_reserve	AT %I*		:	BOOL;			// reserve
+	I002_reserve	AT %I*		:	BOOL;			// reserve
+	I003_reserve	AT %I*		:	BOOL;			// reserve
+	I004_reserve	AT %I*		:	BOOL;			// reserve
+	I005_reserve	AT %I*		:	BOOL;			// reserve
+	I006_reserve	AT %I*		:	BOOL;			// reserve
+	I007_reserve	AT %I*		:	BOOL;			// reserve
+	
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

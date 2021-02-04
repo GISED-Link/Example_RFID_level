@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="AXIS" Id="{769aff4a-f6c5-4fa2-9c4a-48b81c85136f}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+(*******************************************************************)
+(* ACHSEN KONSTANTEN *)
+(*******************************************************************)
+VAR_GLOBAL CONSTANT
+	//Axis
+
+END_VAR
+VAR_GLOBAL
+(*******************************************************************)
+(* ACHSEN Variablen *)
+(*******************************************************************)
+
+END_VAR
+
+(*******************************************************************)
+(* ACHSEN Positionen von HMI*)
+(*******************************************************************)	
+VAR_GLOBAL RETAIN
+													
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
