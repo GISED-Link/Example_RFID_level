@@ -4,6 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	fb_rfid : FB_BF_IDM25_SIMPLE;
+	fb_id_list : FB_ID_list_man;
 END_VAR
 ]]></Declaration>
     <Implementation>

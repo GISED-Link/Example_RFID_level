@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ID_list_man" Id="{9b76b178-bc7a-4898-96bb-151fb9de157f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ID_list_man
+VAR_INPUT
+	stUserIn	: stUserID;		// input ID
+	xAdd		: BOOL;			// add a user, failed if ID is already use
+	xDel		: BOOL;			// delete a user from the list, fail if ID doesn't exist
+	xAccess 	: BOOL;			// modify the access level
+	tRestore	: TIME;			// auto-restore time constant
+	tTimeOut	: TIME;			// timeout value for the current access level. 0 is infinite
+END_VAR
+VAR_OUTPUT
+	iCurrLevel	: enAccessLevel;	// current access level
+	stLastUser	: stUserID;		// last logged user
+	xFail 		: BOOL;			// last operation has failed
+	xPass		: BOOL;			// access level granted or action is a success
+END_VAR
+VAR
+	tonAutoRestore	: TON;		// Restore automatically from error
+	tonTimeOut		: TON;		// Ton timeout access
+	iUserIndex		: INT;		// user index from the list
+END_VAR
+VAR_IN_OUT
+	stArrList : ARRAY [0..19] OF stUserID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//----------------------------------------------------------------------------------
+// manage timeout
+//----------------------------------------------------------------------------------
+IF tTimeOut <> T#0S OR tonTimeOut.Q THEN
+	tonTimeOut(IN := (NOT tonTimeOut.Q), PT := tTimeOut);
+END_IF
+IF tonTimeOut.Q THEN
+	iCurrLevel := enAccessLevel.logged_out;
+END_IF
+
+//----------------------------------------------------------------------------------
+// Restore all the error flag (in case of retry, too)
+//----------------------------------------------------------------------------------
+tonAutoRestore(IN := (xFail OR xPass), PT := tRestore);
+IF tonAutoRestore.Q OR xAdd OR xDel OR xAccess THEN
+	xFail := FALSE;
+	xPass := FALSE;
+END_IF
+
+//----------------------------------------------------------------------------------
+// compute input acctions 
+//----------------------------------------------------------------------------------
+IF xAdd THEN
+	IF NOT add_user(stArrList, stUserIn) THEN
+		xFail := TRUE;
+	END_IF
+END_IF
+
+IF xDel THEN
+	IF NOT delete_user(stArrList, stUserIn) THEN
+		xPass := TRUE;
+	ELSE
+		xFail := TRUE;
+	END_IF
+END_IF
+
+IF xAccess THEN
+	iUserIndex := find_user_in_list(stArrList, stUserIn);
+	IF iUserIndex > 0 THEN
+		stLastUser := stArrList[iUserIndex];
+		iCurrLevel := stArrList[iUserIndex].bLevel;
+		xPass := TRUE;
+	ELSE
+		xFail := TRUE;
+	END_IF
+END_IF
+
+]]></ST>
+    </Implementation>
+    <Method Name="add_user" Id="{ec6f172b-ecea-40d8-b7c8-1a4c94a13711}">
+      <Declaration><![CDATA[METHOD PRIVATE add_user : BOOL
+ (* add a user to the list. Return false is the list is full *)
+VAR_INPUT
+	list	: ARRAY [0..19] OF stUserID;	// list of user
+	user	: stUserID;						// user to add
+END_VAR
+VAR
+	i	: INT;
+	free_index	: INT;	// index of the free spot
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[add_user := FALSE;
+
+// Monkey user checks
+IF 0 = LEN(user.sName) OR THIS^.is_tag_empty(user.bArrTag) 
+	OR (user.bLevel < 0) OR (user.bLevel > enAccessLevel.max_) THEN
+	RETURN;
+END_IF
+
+IF THIS^.is_user_in_list(list, user) THEN
+	RETURN;
+END_IF
+
+free_index := THIS^.find_free_index(list);
+
+IF free_index < 0 THEN
+	RETURN;
+END_IF
+
+list[free_index] := user;
+add_user := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="delete_user" Id="{2087d1e1-27c3-4e59-b568-6c624f23de81}">
+      <Declaration><![CDATA[METHOD PRIVATE delete_user : BOOL
+ (* delete a user to the list. Return false when the target user hasn't been found *)
+VAR_INPUT
+	list	: ARRAY [0..19] OF stUserID;	// list of user
+	user	: stUserID;						// user to add
+END_VAR
+VAR
+	i	: INT;
+	user_index	: INT;	// index of the user to delete
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[delete_user := FALSE;
+
+// Monkey user checks
+IF THIS^.is_tag_empty(user.bArrTag) THEN
+	RETURN;
+END_IF
+
+user_index := THIS^.find_user_in_list(list, user);
+
+IF user_index < 0 THEN
+	RETURN;
+END_IF
+
+memset( ADR(list[user_index]), 0, SIZEOF(stUserID));
+
+delete_user := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="find_free_index" Id="{ecedf067-ce69-4f3c-bac5-2f5747b5224a}">
+      <Declaration><![CDATA[METHOD PRIVATE find_free_index : INT
+(* Get the free spot of the array.
+ * If none found, return value is -1
+ * If a spot is found, then it return the index of the free spot
+ *)
+VAR_INPUT
+	list	: ARRAY [0..19] OF stUserID;	// list of user
+END_VAR
+VAR
+	i	: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i:=0 TO 19 BY 1 DO
+	IF THIS^.is_tag_empty(list[i].bArrTag) THEN
+		find_free_index := i;
+		RETURN;
+	END_IF
+END_FOR
+find_free_index := -1;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="find_user_in_list" Id="{4a6d07f3-e447-4e9f-82ad-8a9e4bf3686c}">
+      <Declaration><![CDATA[METHOD PRIVATE find_user_in_list : INT
+(* Get the user location in the user list.
+ * If the user is not found, the value -1 is returned
+ * If the user is found, the index of the location of the user is returned
+ *)
+VAR_INPUT
+	list	: ARRAY [0..19] OF stUserID;	// list of user
+	user	: stUserID;						// user to check
+END_VAR
+VAR
+	i	: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i:=0 TO 19 BY 1 DO
+	IF THIS^.is_tag_equal(list[i].bArrTag, user.bArrTag) THEN
+		find_user_in_list := i;
+		RETURN;
+	END_IF
+END_FOR
+find_user_in_list := -1;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="is_tag_empty" Id="{c9145936-ac3c-42d2-9e07-1221c6a18460}">
+      <Declaration><![CDATA[METHOD PRIVATE is_tag_empty : BOOL
+VAR_INPUT
+	tag		: ARRAY [0..7] OF BYTE;	// input tag
+END_VAR
+VAR
+	i	: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[is_tag_empty := FALSE;
+FOR i:=0 TO 7 BY 1 DO
+	IF 0 <> tag[i] THEN
+		RETURN;
+	END_IF
+END_FOR
+is_tag_empty := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="is_tag_equal" Id="{6e668225-facf-40fe-9bec-e158a886dcfe}">
+      <Declaration><![CDATA[METHOD PRIVATE is_tag_equal : BOOL
+(* compare 2 tags. Return TRUE when the 2 tags matches *)
+VAR_INPUT
+	tag1	: ARRAY [0..7] OF BYTE;		// First tag to compare
+	tag2	: ARRAY [0..7] OF BYTE;		// Second tag to compare
+END_VAR
+VAR
+	i	: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[is_tag_equal := FALSE;
+FOR i:=0 TO 7 BY 1 DO
+	IF tag1[i] <> tag2[i] THEN
+		RETURN;
+	END_IF
+END_FOR
+is_tag_equal := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="is_user_in_list" Id="{b5f39436-ed7d-406d-9c23-2ba3190a11f0}">
+      <Declaration><![CDATA[METHOD PRIVATE is_user_in_list : BOOL
+(* Return TRUE when the given user is in the given list *)
+VAR_INPUT
+	list	: ARRAY [0..19] OF stUserID;	// list of user
+	user	: stUserID;						// user to check
+END_VAR
+VAR
+	i	: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[is_user_in_list := FALSE;
+FOR i:=0 TO 19 BY 1 DO
+	IF THIS^.is_tag_equal(list[i].bArrTag, user.bArrTag) THEN
+		is_user_in_list := TRUE;
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_ID_list_man">
+      <LineId Id="131" Count="2" />
+      <LineId Id="117" Count="2" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="125" Count="2" />
+      <LineId Id="135" Count="1" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="53" Count="1" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="97" Count="3" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="95" Count="1" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="78" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.add_user">
+      <LineId Id="5" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="38" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.delete_user">
+      <LineId Id="6" Count="3" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="17" Count="7" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.find_free_index">
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="17" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.find_user_in_list">
+      <LineId Id="6" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.is_tag_empty">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.is_tag_equal">
+      <LineId Id="27" Count="5" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.is_user_in_list">
+      <LineId Id="18" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
