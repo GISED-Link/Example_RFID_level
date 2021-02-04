@@ -26,6 +26,9 @@
     <Compile Include="DUTs\structButton.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\struct_HW_RFID.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GVLs\AXIS.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

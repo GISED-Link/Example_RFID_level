@@ -7,6 +7,8 @@ VAR_GLOBAL
 (* Allgemeine Globale Variablen *)
 (*******************************************************************)
 
+	rfid : struct_HW_RFID;
+
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

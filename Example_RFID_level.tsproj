@@ -2,6 +2,15 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
 	<DataTypes>
 		<DataType>
+			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BYTE</Name>
+			<BitSize>64</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-002000000008}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..0] OF BYTE</Name>
 			<BitSize>8</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
@@ -50,12 +59,187 @@
 				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
 					<Name>Monica Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>IN.I000_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I001_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I002_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I003_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I004_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I005_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I006_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IN.I007_reserve</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.I_RFID_bitheader1</Name>
+							<Comment><![CDATA[ Bit header for the RFID reader]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.I_RFID_bitheader2</Name>
+							<Comment><![CDATA[ Bit header for the RFID reader, must be equal to bitheader1]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.I_RFID_arr_data</Name>
+							<Comment><![CDATA[ Data array of the RFID reader]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}">ARRAY [0..7] OF BYTE</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>OUT.Q000_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q001_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q002_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q003_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q004_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q005_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q006_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q007_res</Name>
+							<Comment><![CDATA[ reserve]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.O_RFID_bitheader1</Name>
+							<Comment><![CDATA[ Bit header for the RFID reader]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.O_RFID_bitheader2</Name>
+							<Comment><![CDATA[ Bit header for the RFID reader, must be equal to bitheader1]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.rfid.O_RFID_arr_data</Name>
+							<Comment><![CDATA[ Data array of the RFID reader]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}">ARRAY [0..7] OF BYTE</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="8" AreaNo="4">
+						<Name>PlcTask Retains</Name>
+						<Var>
+							<Name>PERS.udiTotalOK</Name>
+							<Comment><![CDATA[ Total Counter  OK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTotalNOK</Name>
+							<Comment><![CDATA[ Total Counter  NOK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTempOK</Name>
+							<Comment><![CDATA[ Temporary Counter  OK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTempNOK</Name>
+							<Comment><![CDATA[ Temporary Counter  NOK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCountHon</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM POWER ON [h] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCount6Mon</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM POWER ON [6min (0.1h)] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCountHauto</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM IN AUTOMATIC MODE [h] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCount6Mauto</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM IN AUTOMATIC MODE [6min (0.1h)] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+					</Vars>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>
