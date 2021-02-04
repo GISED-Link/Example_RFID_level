@@ -5,16 +5,36 @@
 VAR
 	fb_rfid : FB_BF_IDM25_SIMPLE;
 	fb_id_list : FB_ID_list_man;
+	
+	local_user_id	: stUserID;
+	local_user_list	: ARRAY [0..19] OF stUserID;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fb_rfid(rfid_hw:=GVL.rfid);
-fb_id_list(	stUserIn := local_user_id, $
-			xAdd := HMI_xAdd, xDel := HMI_xDel, xAccess := HMI_xAccess, tRestore := T#5s, tTimeOut := T#20m);]]></ST>
+      <ST><![CDATA[
+// update HMI var here ...
+_14_STATE();
+
+fb_rfid(rfid_hw:=GVL.rfid);
+fb_id_list(	stUserIn := ADR(local_user_id),
+			stArrList := ADR(local_user_list),
+			xAdd := HMI.xAddUser.rtrig,
+			xDel := HMI.xDelUser.rtrig,
+			xAccess := HMI.xFALSE,
+			tRestore := T#5S,
+			tTimeOut := T#20M);
+
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
+      <LineId Id="30" Count="0" />
+      <LineId Id="27" Count="2" />
       <LineId Id="2" Count="0" />
-      <LineId Id="10" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="11" Count="4" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
