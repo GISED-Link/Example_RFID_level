@@ -13,8 +13,10 @@
 (****************************************************************************)
 VAR
 	//Control Buttons
-	fb_xAdd		: FB_BUTTON;
-	fb_xDel		: FB_BUTTON;
+	fb_bp_add		: FB_BUTTON;
+	fb_bp_del		: FB_BUTTON;
+	fb_bp_access	: FB_BUTTON;
+	fb_bp_logout	: FB_BUTTON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,22 +24,22 @@ END_VAR
 // 	CONTROL BUTTONS
 //****************************************************************************
 //	AUTO 
-fb_xAdd(pbtIN:= ADR(HMI.bp_add_user),
+fb_bp_add(pbtIN:= ADR(HMI.bp_add_user),
 	xINdis:= FALSE, 
 	xINon:= FALSE, 
 	xINerr:= FALSE);
 
-fb_xDel(pbtIN:= ADR(HMI.bp_del_user),
+fb_bp_del(pbtIN:= ADR(HMI.bp_del_user),
 	xINdis:= FALSE, 
 	xINon:= FALSE,
 	xINerr:= FALSE);
 
-fb_xDel(pbtIN:= ADR(HMI.bp_access),
+fb_bp_access(pbtIN:= ADR(HMI.bp_access),
 	xINdis:= FALSE, 
 	xINon:= FALSE,
 	xINerr:= FALSE);
 
-fb_xDel(pbtIN:= ADR(HMI.bp_logout),
+fb_bp_logout(pbtIN:= ADR(HMI.bp_logout),
 	xINdis:= FALSE, 
 	xINon:= FALSE,
 	xINerr:= FALSE);
