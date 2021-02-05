@@ -22,22 +22,25 @@ END_VAR
 // 	CONTROL BUTTONS
 //****************************************************************************
 //	AUTO 
-fb_xAdd(pbtIN:= ADR(HMI.xAddUser),
+fb_xAdd(pbtIN:= ADR(HMI.bp_AddUser),
 	xINdis:= FALSE, 
-	xINon:= main.fb_id_list.xPass AND HMI.xAddUser.press, 
-	xINerr:= main.fb_id_list.xFail AND HMI.xAddUser.press);
+	xINon:= main.fb_id_list.xPass AND HMI.bp_AddUser.press, 
+	xINerr:= main.fb_id_list.xFail AND HMI.bp_AddUser.press);
 
-fb_xDel(pbtIN:= ADR(HMI.xDelUser),
+fb_xDel(pbtIN:= ADR(HMI.bp_DelUser),
 	xINdis:= FALSE, 
-	xINon:= main.fb_id_list.xPass AND HMI.xDelUser.press, 
-	xINerr:= main.fb_id_list.xFail AND HMI.xDelUser.press);
+	xINon:= main.fb_id_list.xPass AND HMI.bp_DelUser.press,
+	xINerr:= main.fb_id_list.xFail AND HMI.bp_DelUser.press);
+
 
 ]]></ST>
     </Implementation>
     <LineIds Name="_14_STATE">
       <LineId Id="3" Count="2" />
       <LineId Id="157" Count="5" />
-      <LineId Id="240" Count="4" />
+      <LineId Id="240" Count="3" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="244" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

@@ -6,7 +6,8 @@ VAR
 	fb_rfid : FB_BF_IDM25_SIMPLE;
 	fb_id_list : FB_ID_list_man;
 	
-	local_user_id	: stUserID;
+	xAccess			: BOOL;		// xAccess
+	xLogOut			: BOOL;		// xLogOut
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -15,13 +16,14 @@ END_VAR
 _14_STATE();
 
 fb_rfid(rfid_hw:=GVL.rfid);
-fb_id_list(	stUserIn := ADR(local_user_id),
+fb_id_list(	stUserIn := HMI.st_user_in,
 			stArrList := ADR(PERS.local_user_list),
-			xAdd := HMI.xAddUser.rtrig,
-			xDel := HMI.xDelUser.rtrig,
-			xAccess := HMI.xFALSE,
+			xAdd := HMI.bp_addUser.rtrig,
+			xDel := HMI.bp_delUser.rtrig,
+			xAccess := HMI.bp_access.rtrig,
+			xLogOut := HMI.bp_logout.rtrig,
 			tRestore := T#5S,
-			tTimeOut := T#20M);
+			tTimeOut := T#1M);
 
 ]]></ST>
     </Implementation>
@@ -31,7 +33,9 @@ fb_id_list(	stUserIn := ADR(local_user_id),
       <LineId Id="2" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="31" Count="0" />
-      <LineId Id="11" Count="4" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="14" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
     </LineIds>
