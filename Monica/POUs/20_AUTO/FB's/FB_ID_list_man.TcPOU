@@ -145,7 +145,7 @@ IF user_index < 0 THEN
 	RETURN;
 END_IF
 
-memset( ADR(list[user_index]), 0, SIZEOF(stUserID));
+memset( ADR(list^[user_index]), 0, SIZEOF(stUserID));
 
 delete_user := TRUE;]]></ST>
       </Implementation>
@@ -257,6 +257,53 @@ FOR i:=0 TO 19 BY 1 DO
 END_FOR]]></ST>
       </Implementation>
     </Method>
+    <Method Name="string_to_tag" Id="{cc042741-56f8-471e-91ee-12cf554d5111}">
+      <Declaration><![CDATA[(* convert a tag in string format to a array of byte *)
+METHOD PUBLIC string_to_tag : BOOL
+VAR_INPUT
+	sTag		: STRING;							// string to convert
+	pArr_tag	: POINTER TO ARRAY[0..7] OF BYTE;	//return value
+END_VAR
+
+VAR
+	i : INT;
+	fb_search_number	: FB_EnumStringNumbers;
+END_VAR
+VAR CONSTANT
+        MAX_SCAN_NUMS : INT := 8;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE (NOT fb_search_number.bEOS) AND (i<MAX_SCAN_NUMS) DO
+	pArr_tag^[i]:= STRING_TO_BYTE(fb_search_number.sNumber);
+	i := i+1;
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="tag_to_string" Id="{d972f266-b1ee-4b85-a601-6107cef71d95}">
+      <Declaration><![CDATA[(* convert a tag to a string *)
+METHOD PUBLIC tag_to_string : BOOL
+VAR_INPUT
+	psIn		: POINTER TO STRING;
+	tag			: ARRAY [0..7] OF BYTE;
+END_VAR
+VAR
+	formatter	: FB_FormatString;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[formatter(	sFormat := '%d.%d.%d.%d.%d.%d.%d.%d',
+			arg1 := F_BYTE(tag[0]),
+			arg2 := F_BYTE(tag[1]),
+			arg3 := F_BYTE(tag[2]),
+			arg4 := F_BYTE(tag[3]),
+			arg5 := F_BYTE(tag[4]),
+			arg6 := F_BYTE(tag[5]),
+			arg7 := F_BYTE(tag[6]),
+			arg8 := F_BYTE(tag[7]));
+			
+psIn^ := formatter.sOut;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="FB_ID_list_man">
       <LineId Id="132" Count="1" />
       <LineId Id="117" Count="2" />
@@ -353,6 +400,17 @@ END_FOR]]></ST>
       <LineId Id="7" Count="0" />
       <LineId Id="16" Count="1" />
       <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.string_to_tag">
+      <LineId Id="10" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ID_list_man.tag_to_string">
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="5" />
+      <LineId Id="19" Count="3" />
     </LineIds>
   </POU>
 </TcPlcObject>
