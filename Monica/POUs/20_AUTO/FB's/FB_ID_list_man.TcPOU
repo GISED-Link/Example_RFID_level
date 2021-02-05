@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_ID_list_man" Id="{9b76b178-bc7a-4898-96bb-151fb9de157f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_ID_list_man
-(* Manage a list of users ad grant access if user's tag is recognize *)
+    <Declaration><![CDATA[(* Manage a list of users ad grant access if user's tag is recognize.
+   The only element compared for managing the list is **the tag** only
+ *)
+FUNCTION_BLOCK FB_ID_list_man
 
 VAR_INPUT
 	stUserIn	: POINTER TO stUserID;		// input ID
@@ -64,6 +66,8 @@ IF xDel THEN
 	END_IF
 END_IF
 
+
+
 IF xAccess THEN
 	iUserIndex := find_user_in_list(stArrList, stUserIn);
 	IF iUserIndex > 0 THEN
@@ -78,8 +82,10 @@ END_IF
 ]]></ST>
     </Implementation>
     <Method Name="add_user" Id="{ec6f172b-ecea-40d8-b7c8-1a4c94a13711}">
-      <Declaration><![CDATA[METHOD PRIVATE add_user : BOOL
- (* add a user to the list. Return false is the list is full *)
+      <Declaration><![CDATA[(* add a user to the list. Return false is the list is full 
+   or if user tag is already in the list  
+ *)
+METHOD PRIVATE add_user : BOOL
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 	user	: POINTER TO stUserID;					// user to add
@@ -114,8 +120,8 @@ add_user := TRUE;
       </Implementation>
     </Method>
     <Method Name="delete_user" Id="{2087d1e1-27c3-4e59-b568-6c624f23de81}">
-      <Declaration><![CDATA[METHOD PRIVATE delete_user : BOOL
- (* delete a user to the list. Return false when the target user hasn't been found *)
+      <Declaration><![CDATA[(* delete a user to the list. Return false when the target user tag hasn't been found *)
+METHOD PRIVATE delete_user : BOOL
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 	user	: POINTER TO stUserID;					// user to add
@@ -145,11 +151,11 @@ delete_user := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="find_free_index" Id="{ecedf067-ce69-4f3c-bac5-2f5747b5224a}">
-      <Declaration><![CDATA[METHOD PRIVATE find_free_index : INT
-(* Get the free spot of the array.
- * If none found, return value is -1
- * If a spot is found, then it return the index of the free spot
+      <Declaration><![CDATA[(* Get the free spot of the array.
+   If none found, return value is -1
+   If a spot is found, then it return the index of the free spot
  *)
+METHOD PRIVATE find_free_index : INT
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 END_VAR
@@ -169,11 +175,11 @@ find_free_index := -1;
       </Implementation>
     </Method>
     <Method Name="find_user_in_list" Id="{4a6d07f3-e447-4e9f-82ad-8a9e4bf3686c}">
-      <Declaration><![CDATA[METHOD PRIVATE find_user_in_list : INT
-(* Get the user location in the user list.
- * If the user is not found, the value -1 is returned
- * If the user is found, the index of the location of the user is returned
+      <Declaration><![CDATA[(* Get the user location in the user list.
+   If the user is not found, the value -1 is returned
+   If the user is found, the index of the location of the user is returned
  *)
+METHOD PRIVATE find_user_in_list : INT
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 	user	: POINTER TO stUserID;						// user to check
@@ -193,8 +199,8 @@ find_user_in_list := -1;]]></ST>
       </Implementation>
     </Method>
     <Method Name="is_tag_empty" Id="{c9145936-ac3c-42d2-9e07-1221c6a18460}">
-      <Declaration><![CDATA[METHOD PRIVATE is_tag_empty : BOOL
-(* Return TRUE if all the fields from a tag is emtpy *)
+      <Declaration><![CDATA[(* Return TRUE if all the fields from a tag is emtpy *)
+METHOD PRIVATE is_tag_empty : BOOL
 VAR_INPUT
 	tag		: ARRAY [0..7] OF BYTE;	// input tag
 END_VAR
@@ -212,8 +218,8 @@ is_tag_empty := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="is_tag_equal" Id="{6e668225-facf-40fe-9bec-e158a886dcfe}">
-      <Declaration><![CDATA[METHOD PRIVATE is_tag_equal : BOOL
-(* compare 2 tags. Return TRUE when the 2 tags matches *)
+      <Declaration><![CDATA[(* compare 2 tags. Return TRUE when the 2 tags matches *)
+METHOD PRIVATE is_tag_equal : BOOL
 VAR_INPUT
 	tag1	: ARRAY [0..7] OF BYTE;		// First tag to compare
 	tag2	: ARRAY [0..7] OF BYTE;		// Second tag to compare
@@ -232,8 +238,8 @@ is_tag_equal := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="is_user_in_list" Id="{b5f39436-ed7d-406d-9c23-2ba3190a11f0}">
-      <Declaration><![CDATA[METHOD PRIVATE is_user_in_list : BOOL
-(* Return TRUE when the given user is in the given list *)
+      <Declaration><![CDATA[(* Return TRUE when the given user is in the given list *)
+METHOD PRIVATE is_user_in_list : BOOL
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 	user	: POINTER TO stUserID;						// user to check
@@ -280,6 +286,8 @@ END_FOR]]></ST>
       <LineId Id="100" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="67" Count="0" />
+      <LineId Id="177" Count="0" />
+      <LineId Id="176" Count="0" />
       <LineId Id="83" Count="0" />
       <LineId Id="86" Count="0" />
       <LineId Id="102" Count="0" />
