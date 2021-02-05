@@ -276,11 +276,13 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[is_user_in_list := FALSE;
-FOR i:=0 TO 19 BY 1 DO
-	IF THIS^.is_tag_equal(list^[i].bArrTag, user^.bArrTag) THEN
-		is_user_in_list := TRUE;
-	END_IF
-END_FOR]]></ST>
+IF NOT THIS^.is_tag_empty(user^.bArrTag) THEN
+	FOR i:=0 TO 19 BY 1 DO
+		IF THIS^.is_tag_equal(list^[i].bArrTag, user^.bArrTag) THEN
+			is_user_in_list := TRUE;
+		END_IF
+	END_FOR
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="string_to_tag" Id="{cc042741-56f8-471e-91ee-12cf554d5111}">
@@ -453,10 +455,12 @@ psIn^ := formatter.sOut;]]></ST>
     </LineIds>
     <LineIds Name="FB_ID_list_man.is_user_in_list">
       <LineId Id="18" Count="0" />
+      <LineId Id="28" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
       <LineId Id="16" Count="1" />
       <LineId Id="8" Count="0" />
+      <LineId Id="29" Count="0" />
     </LineIds>
     <LineIds Name="FB_ID_list_man.string_to_tag">
       <LineId Id="21" Count="0" />
