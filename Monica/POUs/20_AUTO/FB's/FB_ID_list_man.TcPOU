@@ -12,6 +12,7 @@ VAR_INPUT
 	xAdd		: BOOL;			// add a user, failed if ID is already use
 	xDel		: BOOL;			// delete a user from the list, fail if ID doesn't exist
 	xAccess 	: BOOL;			// modify the access level
+	xLogOut		: BOOL;			// logout and restore level to log_off
 	tRestore	: TIME;			// auto-restore time constant
 	tTimeOut	: TIME;			// timeout value for the current access level. 0 is infinite
 END_VAR
@@ -66,11 +67,9 @@ IF xDel THEN
 	END_IF
 END_IF
 
-
-
 IF xAccess THEN
 	iUserIndex := find_user_in_list(stArrList, stUserIn);
-	IF iUserIndex > 0 THEN
+	IF iUserIndex >= 0 THEN
 		stLastUser := stArrList^[iUserIndex];
 		iCurrLevel := stArrList^[iUserIndex].bLevel;
 		xPass := TRUE;
@@ -80,6 +79,9 @@ IF xAccess THEN
 END_IF
 
 ]]></ST>
+IF xLogOut THEN
+	iCurrLevel := enAccessLevel.logged_out;
+END_IF]]></ST>
     </Implementation>
     <Method Name="add_user" Id="{ec6f172b-ecea-40d8-b7c8-1a4c94a13711}">
       <Declaration><![CDATA[(* add a user to the list. Return false is the list is full 
