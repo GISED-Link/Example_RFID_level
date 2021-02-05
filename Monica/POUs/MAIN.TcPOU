@@ -6,8 +6,8 @@ VAR
 	fb_rfid : FB_BF_IDM25_SIMPLE;
 	fb_id_list : FB_ID_list_man;
 	
-	xAccess			: BOOL;		// xAccess
-	xLogOut			: BOOL;		// xLogOut
+	sUser_tag_in	: STRING;		// user tag in a string forrmat
+	sUser_tag_out	: STRING;		// user tag in a string forrmat
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -15,7 +15,11 @@ END_VAR
 // update HMI var here ...
 _14_STATE();
 
+
+
 fb_rfid(rfid_hw:=GVL.rfid);
+
+fb_id_list.string_to_tag(sUser_tag_in, ADR(HMI.st_user_in.bArrTag));
 fb_id_list(	stUserIn := HMI.st_user_in,
 			stArrList := ADR(PERS.local_user_list),
 			xAdd := HMI.bp_add_user.rtrig,
@@ -24,18 +28,26 @@ fb_id_list(	stUserIn := HMI.st_user_in,
 			xLogOut := HMI.bp_logout.rtrig,
 			tRestore := T#1S,
 			tTimeOut := T#1M);
+			
+fb_id_list.tag_to_string(ADR(sUser_tag_out), fb_id_list.stLastUser.bArrTag);
 
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="30" Count="0" />
-      <LineId Id="27" Count="2" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="29" Count="0" />
       <LineId Id="2" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="45" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="11" Count="2" />
       <LineId Id="42" Count="0" />
       <LineId Id="14" Count="1" />
+      <LineId Id="49" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
     </LineIds>
