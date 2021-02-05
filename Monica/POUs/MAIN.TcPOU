@@ -6,8 +6,11 @@ VAR
 	fb_rfid : FB_BF_IDM25_SIMPLE;
 	fb_id_list : FB_ID_list_man;
 	
+	xRFID_new_value	: BOOL;		// Rising edge for the new value
+	
 	sUser_tag_in	: STRING;		// user tag in a string forrmat
 	sUser_tag_out	: STRING;		// user tag in a string forrmat
+	sCurr_access_level	: STRING;		// current access level in a string format
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,12 +27,22 @@ fb_id_list(	stUserIn := HMI.st_user_in,
 			stArrList := ADR(PERS.local_user_list),
 			xAdd := HMI.bp_add_user.rtrig,
 			xDel := HMI.bp_del_user.rtrig,
-			xAccess := HMI.bp_access.rtrig,
+			xAccess := HMI.bp_access.rtrig OR fb_rfid.xNew_val,
 			xLogOut := HMI.bp_logout.rtrig,
 			tRestore := T#1S,
 			tTimeOut := T#1M);
 			
+// ------------------
+// Resolve output HMI
+// ------------------
+IF fb_id_list.xDel OR fb_id_list.xAccess THEN
+	IF fb_id_list.is_user_in_list(ADR(PERS.local_user_list), ADR(HMI.st_user_in)) THEN
+		HMI.st_user_in := fb_id_list.get_user_by_tag(fb_id_list.stLastUser.bArrTag);
+	END_IF
+END_IF
+
 fb_id_list.tag_to_string(ADR(sUser_tag_out), fb_id_list.stLastUser.bArrTag);
+sCurr_access_level := TO_STRING(fb_id_list.iCurrLevel);
 
 ]]></ST>
     </Implementation>
@@ -47,7 +60,15 @@ fb_id_list.tag_to_string(ADR(sUser_tag_out), fb_id_list.stLastUser.bArrTag);
       <LineId Id="11" Count="2" />
       <LineId Id="42" Count="0" />
       <LineId Id="14" Count="1" />
-      <LineId Id="49" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="59" Count="3" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="70" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
     </LineIds>
