@@ -67,11 +67,15 @@ IF xDel THEN
 END_IF
 
 IF xAccess THEN
-	iUserIndex := find_user_in_list(stArrList, ADR(stUserIn));
-	IF iUserIndex >= 0 THEN
-		stLastUser := stArrList^[iUserIndex];
-		iCurrLevel := stArrList^[iUserIndex].bLevel;
-		xPass := TRUE;
+	IF NOT is_tag_empty(stUserIn.bArrTag) THEN
+		iUserIndex := find_user_in_list(stArrList, ADR(stUserIn));
+		IF iUserIndex >= 0 THEN
+			stLastUser := stArrList^[iUserIndex];
+			iCurrLevel := stArrList^[iUserIndex].bLevel;
+			xPass := TRUE;
+		ELSE
+			xFail := TRUE;
+		END_IF
 	ELSE
 		xFail := TRUE;
 	END_IF
@@ -198,6 +202,28 @@ END_FOR
 find_user_in_list := -1;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="get_user_by_tag" Id="{f2ccfdcd-b46a-464a-baea-4b1ebbc18abc}">
+      <Declaration><![CDATA[(* Get all user info from the list using a give tag *)
+METHOD PUBLIC get_user_by_tag : stUserID
+VAR_INPUT
+	tag		: ARRAY [0..7] OF BYTE;		// tag
+END_VAR
+
+VAR
+	user_index: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MEMSET(ADR(get_user_by_tag), 0, SIZEOF(stUserID));
+get_user_by_tag.bArrTag := tag;
+
+user_index := THIS^.find_user_in_list(THIS^.stArrList, ADR(get_user_by_tag));
+
+IF user_index >= 0 THEN
+	get_user_by_tag := THIS^.stArrList^[user_index];
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="is_tag_empty" Id="{c9145936-ac3c-42d2-9e07-1221c6a18460}">
       <Declaration><![CDATA[(* Return TRUE if all the fields from a tag is emtpy *)
 METHOD PRIVATE is_tag_empty : BOOL
@@ -239,7 +265,7 @@ is_tag_equal := TRUE;]]></ST>
     </Method>
     <Method Name="is_user_in_list" Id="{b5f39436-ed7d-406d-9c23-2ba3190a11f0}">
       <Declaration><![CDATA[(* Return TRUE when the given user is in the given list *)
-METHOD PRIVATE is_user_in_list : BOOL
+METHOD PUBLIC is_user_in_list : BOOL
 VAR_INPUT
 	list	: POINTER TO ARRAY [0..19] OF stUserID;	// list of user
 	user	: POINTER TO stUserID;						// user to check
@@ -270,11 +296,26 @@ VAR
 	fb_search_number	: FB_EnumStringNumbers;
 END_VAR
 VAR CONSTANT
-        MAX_SCAN_NUMS : INT := 8;
+    MAX_SCAN_NUMS : INT := 8;
+	dot_char 	: BYTE 	:=  16#2C;		// '.' from ASCII table
+	comma_char	: BYTE 	:=  16#2E;		// ',' from ASCII table
+	space_char	: BYTE	:=  16#20;		// ' ' from ASCII table
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WHILE (NOT fb_search_number.bEOS) AND (i<MAX_SCAN_NUMS) DO
+        <ST><![CDATA[i := 0;
+	
+WHILE i<80 AND 0<>sTag[i] DO
+	IF (dot_char = sTag[i]) OR (comma_char = sTag[i]) THEN
+		sTag[i] := space_char;
+	END_IF
+	i := i+1;
+END_WHILE
+
+i:=0;
+fb_search_number( sSearch := sTag, eCmd := eEnumCmd_First );
+WHILE (NOT fb_search_number.bEOS) AND (i<MAX_SCAN_NUMS) DO
 	pArr_tag^[i]:= STRING_TO_BYTE(fb_search_number.sNumber);
+	fb_search_number( eCmd := eEnumCmd_Next );
 	i := i+1;
 END_WHILE]]></ST>
       </Implementation>
@@ -291,7 +332,7 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[formatter(	sFormat := '%d.%d.%d.%d.%d.%d.%d.%d',
+        <ST><![CDATA[formatter(	sFormat := '%.3d.%.3d.%.3d.%.3d.%.3d.%.3d.%.3d.%.3d',
 			arg1 := F_BYTE(tag[0]),
 			arg2 := F_BYTE(tag[1]),
 			arg3 := F_BYTE(tag[2]),
@@ -334,7 +375,13 @@ psIn^ := formatter.sOut;]]></ST>
       <LineId Id="100" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="67" Count="0" />
-      <LineId Id="198" Count="9" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="200" Count="7" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="251" Count="0" />
+      <LineId Id="250" Count="0" />
       <LineId Id="85" Count="0" />
       <LineId Id="209" Count="1" />
       <LineId Id="218" Count="0" />
@@ -380,6 +427,16 @@ psIn^ := formatter.sOut;]]></ST>
       <LineId Id="6" Count="5" />
       <LineId Id="5" Count="0" />
     </LineIds>
+    <LineIds Name="FB_ID_list_man.get_user_by_tag">
+      <LineId Id="17" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
     <LineIds Name="FB_ID_list_man.is_tag_empty">
       <LineId Id="5" Count="0" />
       <LineId Id="8" Count="0" />
@@ -402,8 +459,19 @@ psIn^ := formatter.sOut;]]></ST>
       <LineId Id="8" Count="0" />
     </LineIds>
     <LineIds Name="FB_ID_list_man.string_to_tag">
+      <LineId Id="21" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="25" Count="1" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="64" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="18" Count="0" />
+      <LineId Id="66" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="19" Count="0" />
     </LineIds>
