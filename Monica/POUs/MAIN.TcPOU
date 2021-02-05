@@ -16,7 +16,7 @@ _14_STATE();
 
 fb_rfid(rfid_hw:=GVL.rfid);
 fb_id_list(	stUserIn := ADR(local_user_id),
-			stArrList := ADR(local_user_list),
+			stArrList := ADR(PERS.local_user_list),
 			xAdd := HMI.xAddUser.rtrig,
 			xDel := HMI.xDelUser.rtrig,
 			xAccess := HMI.xFALSE,
