@@ -22,7 +22,7 @@ fb_id_list(	stUserIn := HMI.st_user_in,
 			xDel := HMI.bp_delUser.rtrig,
 			xAccess := HMI.bp_access.rtrig,
 			xLogOut := HMI.bp_logout.rtrig,
-			tRestore := T#5S,
+			tRestore := T#1S,
 			tTimeOut := T#1M);
 
 ]]></ST>
