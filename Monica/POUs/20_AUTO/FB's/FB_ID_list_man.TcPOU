@@ -33,7 +33,7 @@ END_VAR]]></Declaration>
 // manage timeout
 //----------------------------------------------------------------------------------
 IF tTimeOut <> T#0S OR tonTimeOut.Q THEN
-	tonTimeOut(IN := (NOT tonTimeOut.Q), PT := tTimeOut);
+	tonTimeOut(IN := (iCurrLevel <> enAccessLevel.logged_out), PT := tTimeOut);
 END_IF
 IF tonTimeOut.Q THEN
 	iCurrLevel := enAccessLevel.logged_out;
