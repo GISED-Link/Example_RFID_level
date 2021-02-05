@@ -2,6 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <DUT Name="enAccessLevel" Id="{56ee4e33-cdb0-44d0-b4bc-efc8a52a9aec}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
 TYPE enAccessLevel :
 (
 	logged_out,
