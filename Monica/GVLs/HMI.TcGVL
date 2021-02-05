@@ -12,9 +12,11 @@ VAR_GLOBAL
 //----------------------------------------------------------------------------------
 // Access manager
 //----------------------------------------------------------------------------------
-	xAddUser	: structButton;
-	xDelUser	: structButton;
-	xCurrUser	: stUserID;
+	bp_addUser	: structButton;
+	bp_delUser	: structButton;
+	bp_access	: structButton;
+	bp_logout	: structButton;
+	st_user_in	: stUserID;
 	
 END_VAR]]></Declaration>
   </GVL>
