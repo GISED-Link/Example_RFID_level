@@ -28,14 +28,14 @@ IF rfid_hw.I_RFID_bitheader1.raw = rfid_hw.I_RFID_bitheader2.raw THEN
 		error_id := enBN_IDM_error.head_failure;
 		
 	ELSIF rfid_hw.I_RFID_bitheader1.bits.CP THEN
-		FOR i:=0 TO 7 BY 1 DO
-			last_read[i] := rfid_hw.I_RFID_arr_data[i];
-		END_FOR
+		MEMCPY(ADR(last_read), ADR(rfid_hw), SIZEOF(last_read));
+		
 	END_IF
+	
 ELSE
 	error_id := enBN_IDM_error.header_missmatch;
 END_IF
-xRt_new_value(CLK := 0 <> MEMCMP(ADR(last_read), ADR(rfid_hw), 8));
+xRt_new_value(CLK := rfid_hw.I_RFID_bitheader1.bits.CP);
 xNew_val := xRt_new_value.Q;
 error := error_id <> enBN_IDM_error.no_error;
 ]]></ST>
@@ -50,9 +50,9 @@ error := error_id <> enBN_IDM_error.no_error;
       <LineId Id="38" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="9" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="18" Count="1" />
-      <LineId Id="14" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="69" Count="1" />
+      <LineId Id="64" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="21" Count="0" />

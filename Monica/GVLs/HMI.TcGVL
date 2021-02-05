@@ -17,6 +17,7 @@ VAR_GLOBAL
 	bp_access	: structButton;
 	bp_logout	: structButton;
 	st_user_in	: stUserID;
+	sUser_tag_in	: STRING;	// user tag in a string forrmat
 	
 END_VAR]]></Declaration>
   </GVL>
