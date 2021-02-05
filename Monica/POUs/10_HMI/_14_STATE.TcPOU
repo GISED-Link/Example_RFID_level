@@ -22,15 +22,26 @@ END_VAR
 // 	CONTROL BUTTONS
 //****************************************************************************
 //	AUTO 
-fb_xAdd(pbtIN:= ADR(HMI.bp_AddUser),
+fb_xAdd(pbtIN:= ADR(HMI.bp_add_user),
 	xINdis:= FALSE, 
-	xINon:= main.fb_id_list.xPass AND HMI.bp_AddUser.press, 
-	xINerr:= main.fb_id_list.xFail AND HMI.bp_AddUser.press);
+	xINon:= FALSE, 
+	xINerr:= FALSE);
 
-fb_xDel(pbtIN:= ADR(HMI.bp_DelUser),
+fb_xDel(pbtIN:= ADR(HMI.bp_del_user),
 	xINdis:= FALSE, 
-	xINon:= main.fb_id_list.xPass AND HMI.bp_DelUser.press,
-	xINerr:= main.fb_id_list.xFail AND HMI.bp_DelUser.press);
+	xINon:= FALSE,
+	xINerr:= FALSE);
+
+fb_xDel(pbtIN:= ADR(HMI.bp_access),
+	xINdis:= FALSE, 
+	xINon:= FALSE,
+	xINerr:= FALSE);
+
+fb_xDel(pbtIN:= ADR(HMI.bp_logout),
+	xINdis:= FALSE, 
+	xINon:= FALSE,
+	xINerr:= FALSE);
+	
 
 
 ]]></ST>
@@ -39,6 +50,7 @@ fb_xDel(pbtIN:= ADR(HMI.bp_DelUser),
       <LineId Id="3" Count="2" />
       <LineId Id="157" Count="5" />
       <LineId Id="240" Count="3" />
+      <LineId Id="262" Count="10" />
       <LineId Id="260" Count="0" />
       <LineId Id="244" Count="0" />
       <LineId Id="2" Count="0" />

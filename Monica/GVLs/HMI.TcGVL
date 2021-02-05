@@ -12,8 +12,8 @@ VAR_GLOBAL
 //----------------------------------------------------------------------------------
 // Access manager
 //----------------------------------------------------------------------------------
-	bp_addUser	: structButton;
-	bp_delUser	: structButton;
+	bp_add_user	: structButton;
+	bp_del_user	: structButton;
 	bp_access	: structButton;
 	bp_logout	: structButton;
 	st_user_in	: stUserID;
