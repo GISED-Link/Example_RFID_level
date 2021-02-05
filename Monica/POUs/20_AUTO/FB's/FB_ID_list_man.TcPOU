@@ -7,8 +7,8 @@
 FUNCTION_BLOCK FB_ID_list_man
 
 VAR_INPUT
-	stUserIn	: POINTER TO stUserID;		// input ID
-	stArrList : POINTER TO ARRAY [0..19] OF stUserID;
+	stUserIn	: stUserID;		// input ID
+	stArrList 	: POINTER TO ARRAY [0..19] OF stUserID;
 	xAdd		: BOOL;			// add a user, failed if ID is already use
 	xDel		: BOOL;			// delete a user from the list, fail if ID doesn't exist
 	xAccess 	: BOOL;			// modify the access level
@@ -28,8 +28,7 @@ VAR
 	iUserIndex		: INT;		// user index from the list
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-//----------------------------------------------------------------------------------
+      <ST><![CDATA[//----------------------------------------------------------------------------------
 // manage timeout
 //----------------------------------------------------------------------------------
 IF tTimeOut <> T#0S OR tonTimeOut.Q THEN
@@ -52,7 +51,7 @@ END_IF
 // compute input acctions 
 //----------------------------------------------------------------------------------
 IF xAdd THEN
-	IF add_user(stArrList, stUserIn) THEN
+	IF add_user(stArrList, ADR(stUserIn)) THEN
 		xPass := TRUE;
 	ELSE
 		xFail := TRUE;
@@ -60,7 +59,7 @@ IF xAdd THEN
 END_IF
 
 IF xDel THEN
-	IF delete_user(stArrList, stUserIn) THEN
+	IF delete_user(stArrList, ADR(stUserIn)) THEN
 		xPass := TRUE;
 	ELSE
 		xFail := TRUE;
@@ -68,7 +67,7 @@ IF xDel THEN
 END_IF
 
 IF xAccess THEN
-	iUserIndex := find_user_in_list(stArrList, stUserIn);
+	iUserIndex := find_user_in_list(stArrList, ADR(stUserIn));
 	IF iUserIndex >= 0 THEN
 		stLastUser := stArrList^[iUserIndex];
 		iCurrLevel := stArrList^[iUserIndex].bLevel;
@@ -78,7 +77,6 @@ IF xAccess THEN
 	END_IF
 END_IF
 
-]]></ST>
 IF xLogOut THEN
 	iCurrLevel := enAccessLevel.logged_out;
 END_IF]]></ST>
@@ -260,7 +258,7 @@ END_FOR]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_ID_list_man">
-      <LineId Id="131" Count="2" />
+      <LineId Id="132" Count="1" />
       <LineId Id="117" Count="2" />
       <LineId Id="51" Count="0" />
       <LineId Id="125" Count="2" />
@@ -276,7 +274,8 @@ END_FOR]]></ST>
       <LineId Id="57" Count="0" />
       <LineId Id="129" Count="0" />
       <LineId Id="58" Count="0" />
-      <LineId Id="148" Count="1" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="149" Count="0" />
       <LineId Id="60" Count="0" />
       <LineId Id="75" Count="0" />
       <LineId Id="63" Count="0" />
@@ -288,19 +287,10 @@ END_FOR]]></ST>
       <LineId Id="100" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="67" Count="0" />
-      <LineId Id="177" Count="0" />
-      <LineId Id="176" Count="0" />
-      <LineId Id="83" Count="0" />
-      <LineId Id="86" Count="0" />
-      <LineId Id="102" Count="0" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="105" Count="0" />
-      <LineId Id="95" Count="1" />
-      <LineId Id="89" Count="0" />
-      <LineId Id="92" Count="0" />
+      <LineId Id="198" Count="9" />
       <LineId Id="85" Count="0" />
-      <LineId Id="81" Count="0" />
+      <LineId Id="209" Count="1" />
+      <LineId Id="218" Count="0" />
       <LineId Id="78" Count="0" />
     </LineIds>
     <LineIds Name="FB_ID_list_man.add_user">
