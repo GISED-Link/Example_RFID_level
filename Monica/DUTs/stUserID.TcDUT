@@ -6,7 +6,7 @@
 STRUCT
 	bArrTag		: ARRAY [0..7] OF BYTE;		// tag number
 	sName		: STRING;					// user name
-	bLevel		: BYTE;						// access level
+	bLevel		: enAccessLevel;			// access level
 END_STRUCT
 END_TYPE
 ]]></Declaration>
