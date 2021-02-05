@@ -42,7 +42,7 @@ END_IF
 // Restore all the error flag (in case of retry, too)
 //----------------------------------------------------------------------------------
 tonAutoRestore(IN := (xFail OR xPass), PT := tRestore);
-IF tonAutoRestore.Q OR xAdd OR xDel OR xAccess THEN
+IF tonAutoRestore.Q OR xAdd OR xDel OR xAccess OR xLogOut THEN
 	xFail := FALSE;
 	xPass := FALSE;
 END_IF
