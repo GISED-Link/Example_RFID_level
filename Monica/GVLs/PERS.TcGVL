@@ -18,6 +18,8 @@ VAR_GLOBAL RETAIN
 	udiCountHauto		:	UDINT;		// Operating hours SYSTEM IN AUTOMATIC MODE [h] 
 	udiCount6Mauto		:	UDINT;		// Operating hours SYSTEM IN AUTOMATIC MODE [6min (0.1h)] 
 	
+	// user level list
+	local_user_list	: ARRAY [0..19] OF stUserID;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

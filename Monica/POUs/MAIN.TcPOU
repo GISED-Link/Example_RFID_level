@@ -7,7 +7,6 @@ VAR
 	fb_id_list : FB_ID_list_man;
 	
 	local_user_id	: stUserID;
-	local_user_list	: ARRAY [0..19] OF stUserID;
 END_VAR
 ]]></Declaration>
     <Implementation>
