@@ -3,17 +3,17 @@
   <POU Name="FB_BF_IDM25_SIMPLE" Id="{8476db27-23ba-4438-8115-ad6ad1dee881}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_BF_IDM25_SIMPLE
 VAR_INPUT
+	rfid_hw		: stBN_IDM;
 END_VAR
 VAR_OUTPUT
+	xNew_val	: BOOL;		// New value available
 	last_read	: ARRAY [0..7] OF BYTE;		// array of the last RFID values inside the reader
 	error		: BOOL;						// To TRUE if the RFID reader is in error
 	error_id	: enBN_IDM_error;				// error id
 END_VAR
 VAR
 	i : INT;
-END_VAR
-VAR_IN_OUT
-	rfid_hw		: stBN_IDM;
+	xRt_new_value	: R_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -35,7 +35,8 @@ IF rfid_hw.I_RFID_bitheader1.raw = rfid_hw.I_RFID_bitheader2.raw THEN
 ELSE
 	error_id := enBN_IDM_error.header_missmatch;
 END_IF
-
+xRt_new_value(CLK := 0 <> MEMCMP(ADR(last_read), ADR(rfid_hw), 8));
+xNew_val := xRt_new_value.Q;
 error := error_id <> enBN_IDM_error.no_error;
 ]]></ST>
     </Implementation>
@@ -56,6 +57,7 @@ error := error_id <> enBN_IDM_error.no_error;
       <LineId Id="41" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="43" Count="0" />
+      <LineId Id="62" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="44" Count="0" />
     </LineIds>
