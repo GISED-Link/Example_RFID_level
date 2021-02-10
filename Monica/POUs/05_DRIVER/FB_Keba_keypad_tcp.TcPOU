@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Keba_keypad_tcp" Id="{aa81aac2-4e75-4757-9515-2eae602c7105}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Keba_keypad_tcp
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+	fbSocketCloseAll	:FB_SocketCloseAll;
+	xStartup			: BOOL := TRUE;
+	myServer			: T_HSERVER;
+	
+	server 				: FB_ServerClientConnection;
+	xEnable				: BOOL := FALSE;
+	
+	tcp_rec				: FB_SocketReceive;
+	xExecute 			: BOOL;
+	ton_read			: TON;
+	
+	dest				: ARRAY[1..1024] OF BYTE;
+	myString			: STRING(20);
+	
+END_VAR
+VAR CONSTANT
+	AMS_NET			: T_AmsNetID := '192.168.20.200.1.1';
+	REC_ARR_SIZE	: UDINT	:= 1024;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF xStartup THEN (*On PLC reset or program download close all old connections *)
+	fbSocketCloseAll( sSrvNetId:= '', bExecute:= TRUE, tTimeout:= T#10S );
+ELSE
+	fbSocketCloseAll( bExecute:= FALSE );
+END_IF	
+
+F_CreateServerHnd(		sSrvNetID := '',
+						sLocalHost := '192.168.21.200',
+						nLocalPort := 2020,
+						nMode := LISTEN_MODE_CLOSEALL,
+						bEnable := TRUE,
+						hServer := myServer);
+
+
+server(		hServer := myServer,
+			eMode := E_SocketAcceptMode.eACCEPT_SEL_HOST,
+			sRemoteHost := '192.168.21.201',
+			nRemotePort := 0,
+			bEnable := xEnable,
+			tReconnect := T#1S);
+
+ton_read(IN := NOT ton_read.Q, PT := T#50MS);
+tcp_rec(	sSrvNetId := '',
+			hSocket := server.hSocket,
+			cbLen := 1024,
+			pDest := ADR(dest),
+			bExecute := ton_read.Q,
+			tTimeout := T#100MS);
+			
+IF tcp_rec.nRecBytes <> 0 THEN
+	STRNCPY(ADR(myString), ADR(dest), 20);
+END_IF
+
+xExecute := FALSE;
+xStartup := FALSE;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Keba_keypad_tcp">
+      <LineId Id="344" Count="0" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="330" Count="0" />
+      <LineId Id="266" Count="2" />
+      <LineId Id="331" Count="5" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="337" Count="2" />
+      <LineId Id="347" Count="4" />
+      <LineId Id="371" Count="0" />
+      <LineId Id="353" Count="0" />
+      <LineId Id="340" Count="0" />
+      <LineId Id="356" Count="4" />
+      <LineId Id="365" Count="1" />
+      <LineId Id="368" Count="1" />
+      <LineId Id="341" Count="2" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
