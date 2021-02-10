@@ -359,3 +359,4 @@ _Boot/*
 *.compileinfo
 *.tmc
 *.tpy
+*.tclrs
